@@ -44,8 +44,6 @@ stages:
         python -m pip install --upgrade pip
         pip install setup
         pip install -r requirements.txt
-        pip install localpip 
-        localpip install fbprophet
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
