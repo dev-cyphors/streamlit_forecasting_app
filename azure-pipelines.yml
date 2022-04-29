@@ -54,7 +54,7 @@ stages:
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
 
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       displayName: 'Upload package'
       artifact: drop
 
@@ -77,9 +77,25 @@ stages:
               versionSpec: '$(pythonVersion)'
             displayName: 'Use Python version'
 
+          - task: AzureAppServiceManage@0
+            displayName: 'Stop Azure App Service'
+            inputs:
+              azureSubscription: 'Azure Pass - Sponsorship (14717f69-7775-49aa-8388-0228743d4e30)'
+              Action: 'Stop Azure App Service'
+              WebAppName: 'python-demo-001'
+    
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : python-demo-001'
             inputs:
-              azureSubscription: $(azureServiceConnectionId)
-              appName: $(webAppName)
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              azureSubscription: 'Azure Pass - Sponsorship (14717f69-7775-49aa-8388-0228743d4e30)'
+              appType: 'webAppLinux'
+              appName: 'python-demo-001'
+              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              runtimeStack: 'PYTHON|3.7'
+              
+          - task: AzureAppServiceManage@0
+            displayName: 'Start Azure App Service'
+            inputs:
+                azureSubscription: 'Azure Pass - Sponsorship (14717f69-7775-49aa-8388-0228743d4e30)'
+                Action: 'Start Azure App Service'
+                WebAppName: 'python-demo-001'
