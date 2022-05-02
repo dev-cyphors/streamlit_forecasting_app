@@ -71,7 +71,7 @@ stages:
     environment: $(environmentName)
     strategy:
       runOnce:
-        deploy:
+        deploy: 
           steps:
 
           - task: UsePythonVersion@0
@@ -94,6 +94,7 @@ stages:
               appName: 'python-demo-001'
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               runtimeStack: 'PYTHON|3.7'
+              deploymentMethod: runFromPackage
               
           - task: AzureAppServiceManage@0
             displayName: 'Start Azure App Service'
